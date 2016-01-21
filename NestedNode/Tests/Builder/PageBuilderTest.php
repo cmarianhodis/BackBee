@@ -186,7 +186,7 @@ class PageBuilderTest extends BackBeeTestCase
                 ->setUid('uid')
                 ->setTitle('title')
                 ->setAltTitle('alttitle')
-                ->setRedirect('redirect')
+                ->setRedirect([0 => ['url' => 'redirect']])
                 ->setTarget('target')
                 ->setUrl('url')
                 ->setSite($this->site)

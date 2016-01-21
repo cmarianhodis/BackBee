@@ -138,7 +138,12 @@ class PageTest extends BackBeeTestCase
     {
         $this->assertEquals('url', $this->page->getUrl());
 
-        $this->page->setRedirect('redirect');
+        $setRedirect = [
+            0 => [
+                'url' => 'redirect',
+            ]
+        ];
+        $this->page->setRedirect($setRedirect);
         $this->assertEquals('redirect', $this->page->getUrl());
         $this->assertEquals('redirect', $this->page->getUrl(true));
         $this->assertEquals('url', $this->page->getUrl(false));
@@ -404,7 +409,12 @@ class PageTest extends BackBeeTestCase
      */
     public function testSetRedirect()
     {
-        $this->assertEquals($this->page, $this->page->setRedirect('redirect'));
+        $setRedirect = [
+            0 => [
+                'url' => 'redirect',
+            ]
+        ];
+        $this->assertEquals($this->page, $this->page->setRedirect($setRedirect));
         $this->assertEquals('redirect', $this->page->getRedirect());
     }
 

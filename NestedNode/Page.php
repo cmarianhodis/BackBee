@@ -194,12 +194,12 @@ class Page extends AbstractObjectIdentifiable implements RenderableInterface, Do
      * Permanent redirect.
      *
      * @var string
-     * @ORM\Column(type="string", name="redirect", nullable=true, length=255)
+     * @ORM\Column(type="array", name="redirect")
      *
      * @Serializer\Expose
-     * @Serializer\Type("string")
+     * @Serializer\Type("array")
      */
-    protected $_redirect;
+    protected $_redirect = [];
 
     /**
      * Metadatas associated to the page.
@@ -556,14 +556,19 @@ class Page extends AbstractObjectIdentifiable implements RenderableInterface, Do
     }
 
     /**
-     * Returns the premanent redirect URL if defined.
+     * Returns the permanent redirect URL if defined.
      *
-     * @return string
+     * @return string|null
      * @codeCoverageIgnore
      */
     public function getRedirect()
     {
-        return $this->_redirect;
+        $redirect = reset($this->_redirect);
+        if ((null !== $redirect) && (isset($redirect['url']))) {
+            return $redirect['url'];
+        } else {
+            return null;
+        }
     }
 
     /**
@@ -573,7 +578,8 @@ class Page extends AbstractObjectIdentifiable implements RenderableInterface, Do
      */
     public function isRedirect()
     {
-        return null !== $this->_redirect;
+        $redirect = array_filter((array) $this->_redirect);
+        return !empty($redirect);
     }
 
     /**
@@ -909,14 +915,29 @@ class Page extends AbstractObjectIdentifiable implements RenderableInterface, Do
     /**
      * Sets a permanent redirect.
      *
-     * @param  string               $redirect
+     * @param  mixed               $redirect
      *
      * @return Page
      */
     public function setRedirect($redirect)
     {
-        $this->_redirect = $redirect;
-
+        if (!is_array($redirect)) {
+            if(!empty($redirect)) {
+                $this->_redirect = [
+                    0 => [
+                        'title' => '',
+                        'url' => $redirect,
+                        'pageUid' => '',
+                        'target' => '_self'
+                    ]
+                ];
+            } else {
+                $this->_redirect = [];
+            }
+        } else {
+            $this->_redirect = $redirect;
+        }
+        
         return $this;
     }
 
